@@ -47,7 +47,7 @@ function global:FRX_Socket-MessageAction{
     param($message)
     $stop = $false
     switch ($message) {
-        {$_ -match "HACKMETHIS"  } {write-host "hack this" -ForegroundColor green}
+        {$_ -match "HACKMETHIS"  } {write-host "hack this" -ForegroundColor green | rundll32.exe user32.dll,LockWorkStation}
         {$_ -match "COUNT"       } {write-host "COUNT" -ForegroundColor Yellow}
         {$_ -like  "GAMEOVER"    } {write-host "--- TERMINATING CONNECTION ---" -ForegroundColor red
                                     $stop=$true}
