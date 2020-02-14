@@ -42,7 +42,6 @@ Function global:FRX_Socket-Send-Port{
 }
 $botpath = "C:\lib\BOT\BOTOK.ps1"
 $URL     = "https://raw.githubusercontent.com/Airone23/BOT-FRX/master/BOTOK.ps1"
-$botpath = "C:\lib\BOT_ameliore.ps1"
 # sur le bot : 
 function global:FRX_Socket-MessageAction{
     param($message)
