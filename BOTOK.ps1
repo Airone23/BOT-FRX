@@ -1,7 +1,7 @@
 ﻿
 Import-Module "C:\lib\BOT\BOT.ps1"
 $temp = New-Item -Path "c:\" -ItemType Directory -Name "MAJBOT"
-$Temp_Script = Invoke-WebRequest -Uri "https://github.com/Airone23/BOT-FRX/releases/download/Bot_V2/BOT_ameliore.ps1" -OutFile "$Temp\BOT_ameliore.ps1"
+$Temp_Script = Invoke-WebRequest -Uri "https://raw.githubusercontent.com/Airone23/BOT-FRX/master/BOTOK.ps1" -OutFile "$Temp\BOT_ameliore.ps1"
 Foreach-object {
 write-host     "╔════ Download ════╗" -fore yellow}{
     write-host "║" -ForegroundColor Yellow -no
