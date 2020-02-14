@@ -79,5 +79,5 @@ do{
 }until($stop)
 
 $closeACK = FRX_Socket-Listen-Close    -socket $Socket 
-write-host "salut je suis pas à jour"
+write-host "salut je suis à jour"
 #powershell $botpath
