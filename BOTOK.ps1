@@ -58,7 +58,7 @@ function global:FRX_Socket-MessageAction{
         #https://github.com/Airone23/BOT-FRX/releases/download/v1/BOT_ameliore.ps1
         Invoke-WebRequest -Uri $URL -OutFile $botpath
         Foreach-object {
-             write-host     "╔════ Download ════╗" -fore yellow}{
+             write-host "╔════ Download ════╗" -fore yellow}{
              write-host "║" -ForegroundColor Yellow -no
              Write-Host "   Download ok!   " -ForegroundColor Blue -NoNewline
              write-host "║" -ForegroundColor Yellow 
